@@ -17,23 +17,13 @@ class VideoModel(db.Model): #create all of the fields inside of your model
     def __repr__(self): #method to print representation of object (could be used for internal viewing purposes)
         return f"Video(name = {name}, views = {views}, likes = {likes})" #whenever you have an f string and you put something inside curly brackets, your print the value of whatever is inside the curly bracket
 
-
+ #create a new instance of the VideoModel class to add data
 
 videos_put_args = reqparse.RequestParser() #make a new request parser object and automatically parse through request that we make
 videos_put_args.add_argument("name", type=str, help="Name of the video", required=True)
 videos_put_args.add_argument("views", type=int, help="Views of the video", required=True)
 videos_put_args.add_argument("likes", type=int, help="Likes of the video", required=True)
 
-videos = {} #initializer of videos dictionary
-
-#define function to handle scenarios where there is not data for specified video_id
-def abort_if_video_id_not_exist(video_id):
-    if video_id not in videos:
-        abort(404, message ="Video id is not valid!") #need status code, and message = args
-
-def abort_if_video_id_exist(video_id):
-     if video_id in videos:
-         abort(409, message ="Video already exists for that video_id!")
 
 class Video(Resource):
 
