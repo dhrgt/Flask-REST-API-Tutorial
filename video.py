@@ -1,8 +1,23 @@
 from flask import Flask, request #request handles data retrieval for PUT method
 from flask_restful import Api, Resource, reqparse, abort
+from flask_sqlalchemy import SQLAlchemy #import sqlalchemy module so that we can connect to a db instead of using memory
 
 app = Flask(__name__)
-api = Api(app)
+api = Api(app) #wrap app inside Api object
+app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///test.db'
+db = SQLAlchemy(app) #wrap app application inside sqlalchemy object
+
+#create model
+class VideoModel(db.Model): #create all of the fields inside of your model
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(100), nullable = False) #nullable is false, meaning this field has to have some value
+    views = db.Column(db.Integer, nullable = False)
+    likes = db.Column(db.Integer, nullable = False)
+
+    def __repr__(self): #method to print representation of object (could be used for internal viewing purposes)
+        return f"Video(name = {name}, views = {views}, likes = {likes})" #whenever you have an f string and you put something inside curly brackets, your print the value of whatever is inside the curly bracket
+
+
 
 videos_put_args = reqparse.RequestParser() #make a new request parser object and automatically parse through request that we make
 videos_put_args.add_argument("name", type=str, help="Name of the video", required=True)
